@@ -1,215 +1,76 @@
-/* ── Reset ───────────────────────────────────────────────────────────────── */
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-/* ── Tokens ──────────────────────────────────────────────────────────────── */
-:root {
-    --bg: #f5f4f1;
-    --surface: #ffffff;
-    --border: #dddad3;
-    --text: #1c1b18;
-    --muted: #888580;
-    --accent: #2d5fa6;
-    --accent-lt: #dce8f7;
-    --empty: #eeece8;
-    --pill-bg: #2d5fa6;
-    --pill-text: #ffffff;
-}
-
 body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: system-ui, -apple-system, sans-serif;
-    font-size: 1rem;
-    min-height: 100vh;
-}
-
-/* ── Accessibility ───────────────────────────────────────────────────────── */
-.sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-}
-
-/* ── Header ──────────────────────────────────────────────────────────────── */
-.site-header {
-    background: var(--accent);
-    color: #fff;
-    padding: 1rem 2rem;
-}
-
-.site-title {
-    font-size: 1.3rem;
-    font-weight: 600;
-    letter-spacing: 0.02em;
-}
-
-/* ── Main ────────────────────────────────────────────────────────────────── */
-.site-main {
+    font-family: sans-serif;
     max-width: 860px;
-    margin: 1.75rem auto;
+    margin: 1rem auto;
     padding: 0 1rem;
 }
 
-/* ── Controls ────────────────────────────────────────────────────────────── */
 .controls {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    gap: 0.75rem;
+    align-items: center;
     margin-bottom: 1rem;
 }
 
-.controls__jump {
-    display: flex;
-    gap: 0.4rem;
-}
-
-.btn {
-    font-size: 0.875rem;
-    padding: 0.4rem 0.9rem;
-    border: 1.5px solid var(--accent);
-    border-radius: 4px;
-    background: var(--surface);
-    color: var(--accent);
-    cursor: pointer;
-    font-weight: 600;
-}
-
-.btn:hover {
-    background: var(--accent);
-    color: #fff;
-}
-
-.btn:focus-visible {
-    outline: 3px solid var(--accent);
-    outline-offset: 2px;
-}
-
-select {
-    font-size: 0.875rem;
-    padding: 0.38rem 0.5rem;
-    border: 1.5px solid var(--border);
-    border-radius: 4px;
-    background: var(--surface);
-    color: var(--text);
-    cursor: pointer;
-}
-
-select:focus-visible {
-    outline: 3px solid var(--accent);
-    outline-offset: 2px;
-}
-
-/* ── Calendar heading ────────────────────────────────────────────────────── */
 .cal-heading {
-    font-size: 1.5rem;
-    font-weight: 700;
     text-align: center;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
 }
 
-/* ── Day-of-week header ──────────────────────────────────────────────────── */
-.cal-dow-row {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 2px;
-    margin-bottom: 2px;
-}
-
-.cal-dow-row>div {
-    background: var(--accent);
-    color: #fff;
-    text-align: center;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    padding: 0.4rem 0;
-}
-
-/* ── Calendar grid ───────────────────────────────────────────────────────── */
+.cal-dow-row,
 .cal-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 2px;
 }
 
-/* ── Cells ───────────────────────────────────────────────────────────────── */
+.cal-dow-row {
+    margin-bottom: 2px;
+}
+
+.cal-dow-row>div {
+    text-align: center;
+    font-weight: bold;
+    padding: 0.25rem;
+    background: #eee;
+}
+
 .cell {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    min-height: 80px;
-    padding: 0.3rem 0.4rem;
+    border: 1px solid #ccc;
+    min-height: 70px;
+    padding: 0.25rem;
     display: flex;
     flex-direction: column;
     gap: 0.2rem;
 }
 
 .cell--empty {
-    background: var(--empty);
+    background: #f9f9f9;
     border-color: transparent;
-}
-
-.cell--special {
-    background: var(--accent-lt);
-    border-color: var(--accent);
 }
 
 .cell__num {
     font-size: 0.8rem;
-    font-weight: 700;
-    color: var(--muted);
+    color: #888;
     align-self: flex-end;
 }
 
-.cell--special .cell__num {
-    color: var(--accent);
-}
-
-/* ── Event pill ──────────────────────────────────────────────────────────── */
 .cell__event {
-    display: block;
-    width: 100%;
-    background: var(--pill-bg);
-    color: var(--pill-text);
+    background: #2d5fa6;
+    color: white;
     border: none;
     border-radius: 3px;
-    font-size: 0.68rem;
-    font-family: inherit;
-    line-height: 1.35;
-    padding: 0.18rem 0.32rem;
-    text-align: left;
+    font-size: 0.7rem;
+    padding: 0.15rem 0.3rem;
     cursor: pointer;
-    word-break: break-word;
+    text-align: left;
+    width: 100%;
 }
 
-.cell__event:hover {
-    opacity: 0.82;
-}
-
-.cell__event:focus-visible {
-    outline: 3px solid var(--accent);
-    outline-offset: 2px;
-}
-
-/* ── Modal ───────────────────────────────────────────────────────────────── */
 .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.45);
+    background: rgba(0, 0, 0, 0.4);
     z-index: 10;
 }
 
@@ -219,75 +80,21 @@ select:focus-visible {
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 11;
-    width: min(460px, calc(100vw - 2rem));
-    background: var(--surface);
-    border-radius: 8px;
-    box-shadow: 0 8px 36px rgba(0, 0, 0, 0.18);
-    padding: 1.75rem 2rem 2rem;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 6px;
+    width: min(420px, 90vw);
 }
 
 .modal__close {
-    position: absolute;
-    top: 0.9rem;
-    right: 0.9rem;
+    float: right;
     background: none;
     border: none;
     font-size: 1rem;
-    color: var(--muted);
     cursor: pointer;
-    padding: 0.2rem;
-    border-radius: 3px;
-    line-height: 1;
 }
 
-.modal__close:hover {
-    color: var(--text);
-}
-
-.modal__close:focus-visible {
-    outline: 3px solid var(--accent);
-    outline-offset: 2px;
-}
-
-.modal__title {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--accent);
-    margin-bottom: 0.9rem;
-    padding-right: 1.5rem;
-}
-
-.modal__desc {
-    font-size: 0.95rem;
-    line-height: 1.65;
-}
-
-/* ── Reduced motion ──────────────────────────────────────────────────────── */
-@media (prefers-reduced-motion: reduce) {
-
-    .btn,
-    .cell__event {
-        transition: none;
-    }
-}
-
-/* ── Responsive ──────────────────────────────────────────────────────────── */
-@media (max-width: 560px) {
-    .cell {
-        min-height: 54px;
-        padding: 0.2rem;
-    }
-
-    .cell__event {
-        font-size: 0.6rem;
-    }
-
-    .cal-heading {
-        font-size: 1.15rem;
-    }
-
-    .controls {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
+/* hidden utility used by JS */
+[hidden] {
+    display: none;
 }
