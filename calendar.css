@@ -5,12 +5,7 @@ body {
     padding: 0 1rem;
 }
 
-.controls {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-}
+
 
 .cal-heading {
     text-align: center;
@@ -42,6 +37,11 @@ body {
     display: flex;
     flex-direction: column;
     gap: 0.2rem;
+    background-color: #b3afaf;
+}
+
+.other-month{
+    background-color: rgb(203, 246, 231);
 }
 
 .cell--empty {
@@ -97,4 +97,10 @@ body {
 /* hidden utility used by JS */
 [hidden] {
     display: none;
+}
+
+.controls{
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
 }

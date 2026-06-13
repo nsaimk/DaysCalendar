@@ -16,41 +16,51 @@
 
     <main class="site-main">
 
-        <div class="controls" role="group" aria-label="Calendar navigation">
 
-            <button id="prev-btn" class="btn" aria-label="Go to previous month">
-                ← Prev
-            </button>
+            
+            <div class="controls">
+                <div>
 
-            <div class="controls__jump">
-                <label for="month-select" class="sr-only">Month</label>
-                <select id="month-select" aria-label="Select month"></select>
+                    <label for="month-select" class="sr-only">Month</label>
+                    <button id="prev-month" class="btn" aria-label="Go to previous month">
+                        ← Prev
+                    </button>
+                    <select id="month-select" aria-label="Select month"></select>
+                    
+                    <button id="next-month" class="btn" aria-label="Go to next month">
+                        Next →
+                    </button>
+                </div>
+                <div>
+                    <label for="year-select" class="sr-only">Year</label>
+                    <button id="prev-year" class="btn" aria-label="Go to previous month">
+                        ← Prev
+                    </button>
+                    <select id="year-select" aria-label="Select year"></select>
+                    <button id="next-year" class="btn" aria-label="Go to next month">
+                        Next →
+                    </button>
+                </div>
+                
 
-                <label for="year-select" class="sr-only">Year</label>
-                <select id="year-select" aria-label="Select year"></select>
-            </div>
-
-            <button id="next-btn" class="btn" aria-label="Go to next month">
-                Next →
-            </button>
 
         </div>
 
         <h2 id="cal-heading" class="cal-heading" aria-live="polite" aria-atomic="true"></h2>
 
         <!-- Day-of-week header row -->
-        <div class="cal-dow-row" role="row" aria-label="Days of the week">
-            <div role="columnheader" aria-label="Sunday">Sun</div>
-            <div role="columnheader" aria-label="Monday">Mon</div>
-            <div role="columnheader" aria-label="Tuesday">Tue</div>
-            <div role="columnheader" aria-label="Wednesday">Wed</div>
-            <div role="columnheader" aria-label="Thursday">Thu</div>
-            <div role="columnheader" aria-label="Friday">Fri</div>
-            <div role="columnheader" aria-label="Saturday">Sat</div>
+        <div class="cal-dow-row"  aria-label="Days of the week">
+            <div aria-label="Sunday">Sun</div>
+            <div aria-label="Monday">Mon</div>
+            <div aria-label="Tuesday">Tue</div>
+            <div aria-label="Wednesday">Wed</div>
+            <div aria-label="Thursday">Thu</div>
+            <div aria-label="Friday">Fri</div>
+            <div aria-label="Saturday">Sat</div>
         </div>
 
         <!-- Day cells injected by web.mjs -->
-        <div id="cal-grid" class="cal-grid" role="grid" aria-label="Calendar days"></div>
+        <div id="cal-grid" class="cal-grid"  aria-label="Calendar days"></div>
 
     </main>
 
@@ -58,7 +68,7 @@
     <div id="modal-overlay" class="modal-overlay" hidden aria-hidden="true"></div>
 
     <!-- Modal dialog -->
-    <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"
+    <div id="modal" class="modal" aria-modal="true" aria-labelledby="modal-title"
         aria-describedby="modal-desc" hidden>
         <button id="modal-close" class="modal__close" aria-label="Close dialog">✕</button>
         <h2 id="modal-title" class="modal__title"></h2>
