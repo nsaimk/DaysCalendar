@@ -1,9 +1,3 @@
-// This is a placeholder file which shows how you can access functions and data defined in other files.
-// It can be loaded into index.html.
-// Note that when running locally, in order to open a web page which uses modules, you must serve the directory over HTTP e.g. with https://www.npmjs.com/package/http-server
-// You can't open the index.html file using a file:// URL.
-
-import { getGreeting } from "./common.mjs";
 import daysData from "./days.json" with { type: "json" };
 
 const calGrid = document.getElementById("cal-grid");
@@ -32,23 +26,34 @@ const MONTHS = [
   "December",
 ];
 
+const DAYS = {
+  Sunday: 0,
+  Monday: 1,
+  Tuesday: 2,
+  Wednesday: 3,
+  Thursday: 4,
+  Friday: 5,
+  Saturday: 6,
+};
+
+const ORDERS = { first: 1, second: 2, third: 3, fourth: 4 };
 const RANGE = 50;
 
 // handler functions
 const handleMonthSelectChange = function (e) {
   state.month = +e.target.value;
-  generateCalendar();
+  renderCalendar();
   setDropDownsValues();
 };
 const handleYearSelectChange = function (e) {
   state.year = +e.target.value;
-  generateCalendar();
+  renderCalendar();
   setDropDownsValues();
 };
 const handlePreNextBtns = function (direction, month = false) {
   if (month) state.month += direction;
   else state.year += direction;
-  generateCalendar();
+  renderCalendar();
   setDropDownsValues();
 };
 
@@ -61,6 +66,57 @@ prevYearBtn.addEventListener("click", () => handlePreNextBtns(-1));
 nextYearBtn.addEventListener("click", () => handlePreNextBtns(1));
 
 // functions
+function mapDaysToCalendar() {
+  const { year, month } = state;
+
+  const dates = [];
+
+  for (const day of daysData) {
+    if (MONTHS[month] !== day.monthName) continue;
+
+    const weekday = DAYS[day.dayName];
+    const occurrence = ORDERS[day.occurrence];
+
+    let date;
+
+    if (day.occurrence === "last") {
+      date = getLastOccurrence(year, month, weekday);
+    } else {
+      date = getOccurrence(year, month, weekday, occurrence);
+    }
+
+    dates.push({
+      date,
+      name: day.name,
+      descriptionURL: day.descriptionURL,
+    });
+  }
+
+  return dates;
+}
+
+function getOccurrence(year, month, weekday, occurrence) {
+  const firstDay = new Date(year, month, 1).getDay();
+
+  let offset = weekday - firstDay;
+
+  if (offset < 0) {
+    offset += 7;
+  }
+
+  return 1 + offset + (occurrence - 1) * 7;
+}
+
+function getLastOccurrence(year, month, weekday) {
+  let date = new Date(year, month + 1, 0).getDate();
+
+  while (new Date(year, month, date).getDay() !== weekday) {
+    date--;
+  }
+
+  return date;
+}
+
 function generateCalendar() {
   const { month, year } = state;
   calGrid.textContent = "";
@@ -79,13 +135,7 @@ function generateCalendar() {
   while (calendar.length < 35) {
     calendar.push({ day: i++, currentMonth: false });
   }
-  const cells = calendar.map((item) => {
-    const cell = document.createElement("div");
-    cell.textContent = item.day;
-    cell.className = item.currentMonth ? "cell" : "cell other-month";
-    return cell;
-  });
-  calGrid.append(...cells);
+  return calendar;
 }
 
 function initState() {
@@ -125,9 +175,36 @@ function setDropDownsValues() {
   yearSelect.value = state.year;
 }
 
+function renderCalendar() {
+  const { month, year } = state;
+  const calendar = generateCalendar();
+  const specialDays = mapDaysToCalendar();
+
+  calGrid.textContent = "";
+
+  calendar.forEach((item) => {
+    const cell = document.createElement("div");
+
+    cell.className = item.currentMonth ? "cell" : "cell other-month";
+
+    cell.textContent = item.day;
+
+    const specialDay = item.currentMonth
+      ? specialDays.find((d) => d.date === item.day)
+      : null;
+
+    if (specialDay) {
+      cell.classList.add("special-day");
+      cell.title = specialDay.name;
+    }
+
+    calGrid.appendChild(cell);
+  });
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   initState();
-  generateCalendar();
   populateDropdowns();
   setDropDownsValues();
+  renderCalendar();
 });
