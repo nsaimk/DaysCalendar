@@ -1,4 +1,7 @@
 import daysData from "./days.json" with { type: "json" };
+import { MONTHS, RANGE } from "./constants.mjs";
+import { mapDaysToCalendar } from "./calendar-utils.mjs";
+import { state } from "./state.mjs";
 
 const calGrid = document.getElementById("cal-grid");
 const monthSelect = document.getElementById("month-select");
@@ -8,118 +11,45 @@ const nextMonthBtn = document.getElementById("next-month");
 const prevYearBtn = document.getElementById("prev-year");
 const nextYearBtn = document.getElementById("next-year");
 
-const state = {};
-const todayDate = new Date();
-
-const MONTHS = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
-
-const DAYS = {
-  Sunday: 0,
-  Monday: 1,
-  Tuesday: 2,
-  Wednesday: 3,
-  Thursday: 4,
-  Friday: 5,
-  Saturday: 6,
-};
-
-const ORDERS = { first: 1, second: 2, third: 3, fourth: 4 };
-const RANGE = 50;
-
 // handler functions
 const handleMonthSelectChange = function (e) {
   state.month = +e.target.value;
-  renderCalendar();
-  setDropDownsValues();
+  syncUI();
 };
 const handleYearSelectChange = function (e) {
   state.year = +e.target.value;
-  renderCalendar();
-  setDropDownsValues();
+  syncUI();
 };
-const handlePreNextBtns = function (direction, month = false) {
-  if (month) state.month += direction;
-  else state.year += direction;
-  renderCalendar();
-  setDropDownsValues();
+const handleMonthPreNextBtns = function (direction) {
+  const { month, year } = state;
+  if (month === 11 && direction === 1) {
+    state.month = 0;
+    state.year++;
+  } else if (month === 0 && direction === -1) {
+    state.month = 11;
+    state.year--;
+  } else state.month += direction;
+
+  syncUI();
+};
+
+const handleYearPreNextBtns = function (direction) {
+  state.year += direction;
+  syncUI();
 };
 
 // eventListeners
 monthSelect.addEventListener("change", handleMonthSelectChange);
 yearSelect.addEventListener("change", handleYearSelectChange);
-prevMonthBtn.addEventListener("click", () => handlePreNextBtns(-1, true));
-nextMonthBtn.addEventListener("click", () => handlePreNextBtns(1, true));
-prevYearBtn.addEventListener("click", () => handlePreNextBtns(-1));
-nextYearBtn.addEventListener("click", () => handlePreNextBtns(1));
+prevMonthBtn.addEventListener("click", () => handleMonthPreNextBtns(-1));
+nextMonthBtn.addEventListener("click", () => handleMonthPreNextBtns(1));
+prevYearBtn.addEventListener("click", () => handleYearPreNextBtns(-1));
+nextYearBtn.addEventListener("click", () => handleYearPreNextBtns(1));
 
 // functions
-function mapDaysToCalendar() {
-  const { year, month } = state;
-
-  const dates = [];
-
-  for (const day of daysData) {
-    if (MONTHS[month] !== day.monthName) continue;
-
-    const weekday = DAYS[day.dayName];
-    const occurrence = ORDERS[day.occurrence];
-
-    let date;
-
-    if (day.occurrence === "last") {
-      date = getLastOccurrence(year, month, weekday);
-    } else {
-      date = getOccurrence(year, month, weekday, occurrence);
-    }
-
-    dates.push({
-      date,
-      name: day.name,
-      descriptionURL: day.descriptionURL,
-    });
-  }
-
-  return dates;
-}
-
-function getOccurrence(year, month, weekday, occurrence) {
-  const firstDay = new Date(year, month, 1).getDay();
-
-  let offset = weekday - firstDay;
-
-  if (offset < 0) {
-    offset += 7;
-  }
-
-  return 1 + offset + (occurrence - 1) * 7;
-}
-
-function getLastOccurrence(year, month, weekday) {
-  let date = new Date(year, month + 1, 0).getDate();
-
-  while (new Date(year, month, date).getDay() !== weekday) {
-    date--;
-  }
-
-  return date;
-}
 
 function generateCalendar() {
   const { month, year } = state;
-  calGrid.textContent = "";
 
   const daysInCurrentMonth = new Date(year, month + 1, 0).getDate();
   const firstDayInMonth = new Date(year, month, 1).getDay();
@@ -132,19 +62,31 @@ function generateCalendar() {
     calendar.push({ day: i, currentMonth: true });
   }
   let i = 1;
-  while (calendar.length < 35) {
+  while (calendar.length < 42) {
     calendar.push({ day: i++, currentMonth: false });
   }
   return calendar;
 }
+function enableDisablePrevNextBtns() {
+  const thisYear = new Date().getFullYear();
+  nextYearBtn.disabled = state.year === thisYear + RANGE;
+  prevYearBtn.disabled = state.year === thisYear - RANGE;
+  nextMonthBtn.disabled = state.year === thisYear + RANGE && state.month === 11;
+  prevMonthBtn.disabled = state.year === thisYear - RANGE && state.month === 0;
+}
+
+function syncUI() {
+  renderCalendar();
+  setDropDownsValues();
+  enableDisablePrevNextBtns();
+}
 
 function initState() {
-  state.month = todayDate.getMonth();
-  state.year = todayDate.getFullYear();
+  state.month = new Date().getMonth();
+  state.year = new Date().getFullYear();
 }
 
 function populateDropdowns() {
-  const { year, month } = state;
   const monthOptions = MONTHS.map((month, i) => {
     const option = document.createElement("option");
     option.value = i;
@@ -178,16 +120,18 @@ function setDropDownsValues() {
 function renderCalendar() {
   const { month, year } = state;
   const calendar = generateCalendar();
-  const specialDays = mapDaysToCalendar();
+
+  const specialDays = mapDaysToCalendar(year, month, daysData);
 
   calGrid.textContent = "";
 
-  calendar.forEach((item) => {
+  const cells = calendar.map((item) => {
     const cell = document.createElement("div");
 
     cell.className = item.currentMonth ? "cell" : "cell other-month";
 
     cell.textContent = item.day;
+    cell.dataset.currentMonth = item.currentMonth;
 
     const specialDay = item.currentMonth
       ? specialDays.find((d) => d.date === item.day)
@@ -198,8 +142,18 @@ function renderCalendar() {
       cell.title = specialDay.name;
     }
 
-    calGrid.appendChild(cell);
+    return cell;
   });
+
+  for (let i = 4; i < 6; i++) {
+    const row = cells.slice(i * 7, i * 7 + 7);
+
+    if (row.every((cell) => cell.dataset.currentMonth === "false")) {
+      row.forEach((cell) => cell.classList.add("hidden"));
+    }
+  }
+
+  calGrid.append(...cells);
 }
 
 document.addEventListener("DOMContentLoaded", function () {

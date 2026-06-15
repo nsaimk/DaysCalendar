@@ -104,3 +104,11 @@ body {
     justify-content: center;
     gap: 2rem;
 }
+
+.special-day{
+    background-color: #f99b79;
+}
+
+.hidden {
+    display: none;
+}
