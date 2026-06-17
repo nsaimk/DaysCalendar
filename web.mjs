@@ -159,6 +159,5 @@ function renderCalendar() {
 document.addEventListener("DOMContentLoaded", function () {
   initState();
   populateDropdowns();
-  setDropDownsValues();
-  renderCalendar();
+  syncUI();
 });

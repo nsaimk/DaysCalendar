@@ -1,81 +1,55 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Commemorative Days Calendar</title>
     <link rel="stylesheet" href="calendar.css" />
-</head>
+  </head>
 
-<body>
-
+  <body>
     <header class="site-header">
-        <h1 class="site-title">Days Calendar</h1>
+      <h1 class="site-title">Days Calendar</h1>
     </header>
 
     <main class="site-main">
+      <div class="controls">
+        <div>
+          <label for="month-select" class="sr-only">Month</label>
+          <button id="prev-month" class="btn" aria-label="Go to previous month">
+            ← Prev
+          </button>
+          <select id="month-select" aria-label="Select month"></select>
 
-
-            
-            <div class="controls">
-                <div>
-
-                    <label for="month-select" class="sr-only">Month</label>
-                    <button id="prev-month" class="btn" aria-label="Go to previous month">
-                        ← Prev
-                    </button>
-                    <select id="month-select" aria-label="Select month"></select>
-                    
-                    <button id="next-month" class="btn" aria-label="Go to next month">
-                        Next →
-                    </button>
-                </div>
-                <div>
-                    <label for="year-select" class="sr-only">Year</label>
-                    <button id="prev-year" class="btn" aria-label="Go to previous month">
-                        ← Prev
-                    </button>
-                    <select id="year-select" aria-label="Select year"></select>
-                    <button id="next-year" class="btn" aria-label="Go to next month">
-                        Next →
-                    </button>
-                </div>
-                
-
-
+          <button id="next-month" class="btn" aria-label="Go to next month">
+            Next →
+          </button>
         </div>
-
-        <h2 id="cal-heading" class="cal-heading" aria-live="polite" aria-atomic="true"></h2>
-
-        <!-- Day-of-week header row -->
-        <div class="cal-dow-row"  aria-label="Days of the week">
-            <div aria-label="Sunday">Sun</div>
-            <div aria-label="Monday">Mon</div>
-            <div aria-label="Tuesday">Tue</div>
-            <div aria-label="Wednesday">Wed</div>
-            <div aria-label="Thursday">Thu</div>
-            <div aria-label="Friday">Fri</div>
-            <div aria-label="Saturday">Sat</div>
+        <div>
+          <label for="year-select" class="sr-only">Year</label>
+          <button id="prev-year" class="btn" aria-label="Go to previous month">
+            ← Prev
+          </button>
+          <select id="year-select" aria-label="Select year"></select>
+          <button id="next-year" class="btn" aria-label="Go to next month">
+            Next →
+          </button>
         </div>
+      </div>
 
-        <!-- Day cells injected by web.mjs -->
-        <div id="cal-grid" class="cal-grid"  aria-label="Calendar days"></div>
+      <div class="cal-dow-row" aria-label="Days of the week">
+        <div aria-label="Sunday">Sun</div>
+        <div aria-label="Monday">Mon</div>
+        <div aria-label="Tuesday">Tue</div>
+        <div aria-label="Wednesday">Wed</div>
+        <div aria-label="Thursday">Thu</div>
+        <div aria-label="Friday">Fri</div>
+        <div aria-label="Saturday">Sat</div>
+      </div>
 
+      <div id="cal-grid" class="cal-grid" aria-label="Calendar days"></div>
     </main>
 
-    <!-- Modal overlay -->
-    <div id="modal-overlay" class="modal-overlay" hidden aria-hidden="true"></div>
-
-    <!-- Modal dialog -->
-    <div id="modal" class="modal" aria-modal="true" aria-labelledby="modal-title"
-        aria-describedby="modal-desc" hidden>
-        <button id="modal-close" class="modal__close" aria-label="Close dialog">✕</button>
-        <h2 id="modal-title" class="modal__title"></h2>
-        <p id="modal-desc" class="modal__desc"></p>
-    </div>
-
     <script type="module" src="web.mjs"></script>
-</body>
-
+  </body>
 </html>
