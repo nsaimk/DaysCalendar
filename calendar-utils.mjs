@@ -1,4 +1,4 @@
-import { ORDERS, MONTHS, RANGE, DAYS } from "./constants.mjs";
+import { ORDERS, MONTHS, DAYS } from "./constants.mjs";
 
 export function mapDaysToCalendar(year, month, daysData) {
   const dates = [];
